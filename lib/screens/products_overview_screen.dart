@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/screens/cart_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
+import '../widgets/badge.dart';
+import '../providers/cart_provider.dart';
 
 enum FilterOptions { favourites, all }
 
@@ -33,7 +37,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 },
               );
             },
-            icon: Icon(Icons.more_vert_rounded),
+            icon: Icon(Icons.filter_alt_rounded),
             itemBuilder: (ctx) => [
               PopupMenuItem(
                 child: Text('All'),
@@ -44,6 +48,20 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 value: FilterOptions.favourites,
               ),
             ],
+          ),
+          Consumer<Cart>(
+            builder: (_, cart, child) {
+              return ItemCountBadge(
+                  child: child,
+                  value: cart.itemCount.toString(),
+                  color: Theme.of(context).accentColor);
+            },
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+              icon: Icon(Icons.shopping_cart_rounded),
+            ),
           ),
         ],
       ),
